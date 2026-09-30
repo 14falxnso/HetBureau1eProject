@@ -10,25 +10,37 @@ public class Locker : MonoBehaviour
     [SerializeField] private Button goLeftButton;
     [SerializeField] private Button goRightButton;
 
-    public void ButtonCheck()
+    private int currentIndex = 0;
+
+    private void Start()
     {
-        goLeftButton.onClick.AddListener(() => GoLeftShower());
-        goRightButton.onClick.AddListener(() => GoRightShower());
+        goLeftButton.onClick.AddListener(GoLeftShower);
+        goRightButton.onClick.AddListener(GoRightShower);
+
+        carShow.texture = vehicleRenders[currentIndex];
     }
 
     private void GoLeftShower()
     {
-        for (int i = 0; i < vehicleRenders.Count; i--)
+        currentIndex--;
+
+        if (currentIndex < 0)
         {
-           carShow.texture = vehicleRenders[i];
+            currentIndex = vehicleRenders.Count - 1;
         }
+
+        carShow.texture = vehicleRenders[currentIndex];
     }
 
-    private void GoRightShower() 
+    private void GoRightShower()
     {
-        for (int i = 0; i < vehicleRenders.Count; i++)
+        currentIndex++;
+
+        if (currentIndex >= vehicleRenders.Count)
         {
-            carShow.texture = vehicleRenders[i];
+            currentIndex = 0;
         }
+
+        carShow.texture = vehicleRenders[currentIndex];
     }
 }
