@@ -1,16 +1,16 @@
+using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public float earnedXP;
+    public float playtime;
+    public float levelsCompleted;
+    public float deliveredPost;
+    public float ownedVehicles;
+    public float vehiclesUsed;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Objects")]
+    public List<GameObject> vehiclesList;
 }

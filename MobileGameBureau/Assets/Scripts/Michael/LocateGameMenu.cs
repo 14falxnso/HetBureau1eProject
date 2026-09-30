@@ -8,21 +8,9 @@ using UnityEngine.UI;
 public class LocateGameMenu : MonoBehaviour
 {
     [Header("UI Tabs")]
-    //[SerializeField] private GameObject shopTab;
-    //[SerializeField] private GameObject achievementTab;
-    //[SerializeField] private GameObject homeTab;
-    //[SerializeField] private GameObject passTab;
-    //[SerializeField] private GameObject ownedVehicleTab;
-
     [SerializeField] private List<GameObject> outGameTabs;
 
     [Header("Knoppen")]
-    //[SerializeField] private Button shopButton;
-    //[SerializeField] private Button achievementButton;
-    //[SerializeField] private Button homeButton;
-    //[SerializeField] private Button passButton;
-    //[SerializeField] private Button ownedVehicleButton;
-
     [SerializeField] private List<Button> bottomButtons;
 
     private void Start()
@@ -81,10 +69,5 @@ public class LocateGameMenu : MonoBehaviour
             }
             outGameTabs[4].SetActive(true);
         });
-    }
-
-    public void ClickedButtonShowTab()
-    {
-
     }
 }
