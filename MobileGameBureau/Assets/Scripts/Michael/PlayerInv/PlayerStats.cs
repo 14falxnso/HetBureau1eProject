@@ -13,4 +13,8 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Objects")]
     public List<GameObject> vehiclesList;
+
+    [Header("Powerups")]
+    public List<GameObject> powerupList;
+    public int powerupAmount;
 }
