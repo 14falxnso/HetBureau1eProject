@@ -98,6 +98,7 @@ public class GameManager : MonoBehaviour
         o.reserved += carry;
 
         GameObject v = Instantiate(vehiclePrefab, location, Quaternion.identity);
+        AudioManager.Instance.PlaySound("Plop");
         v.GetComponent<Vehicle>().Init(this, target, carry);
         v.GetComponent<Animator>().SetTrigger(Triggers[target]);
     }
