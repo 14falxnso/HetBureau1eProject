@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class TouchTest : MonoBehaviour
 {
+    //private void Awake()
+    //{
+    //    Cursor.visible = false;
+    //    Cursor.lockState = CursorLockMode.Locked;
+    //}
     void Update()
     {
         if (Input.touchCount > 0)

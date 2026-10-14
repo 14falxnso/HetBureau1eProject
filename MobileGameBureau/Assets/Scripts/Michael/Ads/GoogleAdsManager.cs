@@ -7,6 +7,8 @@ using UnityEngine.Events;
 
 public class GoogleAdsManager : MonoBehaviour
 {
+    [SerializeField] private TestStats testStats;
+
     [SerializeField]
     private string bannerId;
     [SerializeField]
@@ -34,7 +36,7 @@ public class GoogleAdsManager : MonoBehaviour
             interRewardEvent += () => GiveInterReward();
 
             LoadRewardedAd();
-            RewardedEndEvent += () => GiveRewarededReward();
+            RewardedEndEvent += () => GiveRewardedReward();
         });
     }
 
@@ -181,6 +183,7 @@ public class GoogleAdsManager : MonoBehaviour
 
     private void GiveInterReward()
     {
+        testStats.LivesReward(2);
         Debug.Log("Inter Ads Reward Given");
     }
 
@@ -308,8 +311,10 @@ public class GoogleAdsManager : MonoBehaviour
             LoadRewardedAd();
     }
 
-    public void GiveRewarededReward()
+    public void GiveRewardedReward()
     {
+        testStats.MoneyReward(25);
+
         Debug.Log("Rewared Ads Reward Given");
     }
 
