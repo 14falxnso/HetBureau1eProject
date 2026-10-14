@@ -1,8 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class Vehicle : MonoBehaviour
 {
-    public int capacity = 3; // kg: bike 2, car 4, truck 6, etc.
+    public int capacity = 3;
 
     GameManager gm;
     int orderIndex, amount;
@@ -14,10 +15,22 @@ public class Vehicle : MonoBehaviour
         amount = items;
     }
 
-    public void Arrive()
+    public void Arrive() => StartCoroutine(DeliverRoutine());
+
+    IEnumerator DeliverRoutine()
     {
-        gm.Deliver(orderIndex, amount);
+        var wait = new WaitForSeconds(0.3f);
+
+        for (int i = 0; i < amount; i++)
+        {
+            gm.Deliver(orderIndex, 1);
+            AudioManager.Instance.PlaySound("SharpPlop");
+            yield return wait;
+        }
+
         GetComponent<Animator>().SetTrigger("Leave");
+        yield return new WaitForSeconds(5f);
+        Despawn();
     }
 
     public void Despawn() => Destroy(gameObject);
