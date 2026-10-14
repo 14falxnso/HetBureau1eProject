@@ -14,81 +14,89 @@ public class Order
     public GameObject[] kgIcons;
 
     [NonSerialized] public int weight, remaining, reserved;
-    public int Open => remaining - reserved;
+    public int Open => remaining - reserved; // items not yet claimed by a vehicle
 }
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Timer")]
     [SerializeField] TMP_Text timerText;
-    [SerializeField] Order[] orders;
+    [SerializeField] float startTime = 60f;
+
+    [Header("Orders")]
+    [SerializeField] Order[] orders; // closest -> farthest
     [SerializeField] Sprite[] itemSprites;
     [SerializeField] Vector2Int itemCountRange = new(2, 7); // max exclusive
+
+    [Header("Result")]
+    [SerializeField] GameObject resultPanel;
+    [SerializeField] TMP_Text resultText;
 
     public Vector3 location;
 
     static readonly string[] Triggers = { "GoShort", "GoNormal", "GoLong" };
 
-    [SerializeField] float startTime = 60f;
-
     float timeLeft;
     int lastSecond = -1;
-    bool timeUp;
+    bool gameOver;
 
-    [SerializeField] private GameObject resultPanel;
-    [SerializeField] private TMP_Text resultText;
-
-    public bool IsPlaying => Time.timeScale > 0f;
+    public bool IsPlaying => !gameOver && Time.timeScale > 0f;
 
     void Start()
     {
         timeLeft = startTime;
         UpdateTimerText(Mathf.CeilToInt(timeLeft));
+
         foreach (var o in orders) SetupOrder(o);
+        Play("SharpPlop");
     }
+
     void Update()
     {
-        if (timeUp)
-        {
-            Time.timeScale = 0f;
-            resultPanel.SetActive(true);
-            resultText.text = $"Time's up!\n You failed!";
-            return;
-        }
-
-
+        if (gameOver) return;
 
         timeLeft -= Time.deltaTime;
         if (timeLeft <= 0f)
         {
-            timeLeft = 0f;
-            timeUp = true;
             UpdateTimerText(0);
-            TimeUp();
+            EndGame(false);
             return;
         }
 
         int seconds = Mathf.CeilToInt(timeLeft);
         if (seconds != lastSecond) UpdateTimerText(seconds);
-
-        if (orders.Length > 0 && Array.TrueForAll(orders, o => o.remaining <= 0))
-        {
-            Time.timeScale = 0f;
-            resultPanel.SetActive(true);
-            resultText.text = $"All orders completed!\n You win!";
-        }
     }
+
     void UpdateTimerText(int seconds)
     {
         lastSecond = seconds;
         timerText.text = $"{seconds / 60}:{seconds % 60:00}";
     }
-    void TimeUp()
+
+    void EndGame(bool won)
     {
-        Debug.Log("Time's up!");
+        gameOver = true;
+        Time.timeScale = 0f;
+        Play(won ? "Win" : "Lose");
+        resultText.text = won ? "All orders completed!\nYou win!" : "Time's up!\nYou failed!";
+        resultPanel.SetActive(true);
     }
 
-    public void OpenPanel(GameObject panel) { panel.SetActive(true); Time.timeScale = 0f; AudioManager.Instance.PlaySound("SoftPlop"); }
-    public void ClosePanel(GameObject panel) { panel.SetActive(false); Time.timeScale = 1f; AudioManager.Instance.PlaySound("SoftPlop"); }
+    public void OpenPanel(GameObject panel)
+    {
+        if (gameOver) return;
+        panel.SetActive(true);
+        Time.timeScale = 0f;
+        Play("SoftPlop");
+    }
+
+    public void ClosePanel(GameObject panel)
+    {
+        if (gameOver) return;
+        panel.SetActive(false);
+        Time.timeScale = 1f;
+        Play("SoftPlop");
+    }
 
     void SetupOrder(Order o)
     {
@@ -96,38 +104,48 @@ public class GameManager : MonoBehaviour
         o.remaining = Random.Range(itemCountRange.x, itemCountRange.y);
         o.reserved = 0;
 
-        AudioManager.Instance.PlaySound("SharpPlop");
         o.numberText.text = $"Order: {Random.Range(1000, 10000)}";
         o.itemImage.sprite = itemSprites[Random.Range(0, itemSprites.Length)];
-        for (int i = 0; i < o.kgIcons.Length; i++) o.kgIcons[i].SetActive(i < o.weight);
-
         o.countText.text = $"{o.remaining}x";
+
+        for (int i = 0; i < o.kgIcons.Length; i++)
+            o.kgIcons[i].SetActive(i < o.weight);
+
         o.canvas.SetActive(true);
     }
 
     public void OnClickSpawnVechile(GameObject vehiclePrefab)
     {
+        if (gameOver) return;
+
         int target = Array.FindIndex(orders, o => o.Open > 0);
         if (target < 0) return;
 
         Order o = orders[target];
         int carry = Mathf.Min(vehiclePrefab.GetComponent<Vehicle>().capacity / o.weight, o.Open);
-        if (carry == 0) return;
+        if (carry == 0) return; // item too heavy for this vehicle
 
         o.reserved += carry;
 
-        GameObject v = Instantiate(vehiclePrefab, location, Quaternion.identity);
-        v.GetComponent<Vehicle>().Init(this, target, carry);
+        Vehicle v = Instantiate(vehiclePrefab.GetComponent<Vehicle>(), location, Quaternion.identity);
+        v.Init(this, target, carry);
         v.GetComponent<Animator>().SetTrigger(Triggers[target]);
     }
 
     public void Deliver(int index, int amount)
     {
+        if (gameOver) return;
+
         Order o = orders[index];
         o.reserved -= amount;
         o.remaining -= amount;
         o.countText.text = $"{o.remaining}x";
 
-        if (o.remaining <= 0) o.canvas.SetActive(false);
+        if (o.remaining > 0) return;
+
+        o.canvas.SetActive(false);
+        if (Array.TrueForAll(orders, x => x.remaining <= 0)) EndGame(true);
     }
+
+    static void Play(string sound) => AudioManager.Instance.PlaySound(sound);
 }
