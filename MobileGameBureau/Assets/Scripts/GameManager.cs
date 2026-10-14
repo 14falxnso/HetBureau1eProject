@@ -112,4 +112,5 @@ public class GameManager : MonoBehaviour
 
         if (o.remaining <= 0) o.canvas.SetActive(false);
     }
+
 }
