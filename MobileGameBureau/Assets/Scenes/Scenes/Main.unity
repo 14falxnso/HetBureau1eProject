@@ -375,6 +375,8 @@ MonoBehaviour:
   soundEffects:
   - {fileID: 11400000, guid: 2e419bedd1f778049ac0a570461f43d0, type: 2}
   - {fileID: 11400000, guid: 9f8be3539c2ddbf43b79bab2f5bf3dda, type: 2}
+  - {fileID: 11400000, guid: c0a6f18e0897865448d4c22704b4fe16, type: 2}
+  - {fileID: 11400000, guid: 8b71c1f8c1bf4fd4b9e6aa5219ecb7af, type: 2}
 --- !u!82 &109396952
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3899,7 +3901,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -3930,7 +3932,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: -132.91298}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -5196,6 +5198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   timerText: {fileID: 1758203532}
+  startTime: 15
   orders:
   - canvas: {fileID: 1060918725}
     numberText: {fileID: 1700064299}
@@ -5226,8 +5229,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 49b5a0e6c625acf46ae3a32c67140f00, type: 3}
   - {fileID: 21300000, guid: 39bc9c3650f8359478f7994ca513b396, type: 3}
   itemCountRange: {x: 2, y: 7}
+  resultPanel: {fileID: 1753148246}
+  resultText: {fileID: 613344336}
   location: {x: 141.29, y: 424.7, z: -777.2}
-  startTime: 15
 --- !u!4 &787082030
 Transform:
   m_ObjectHideFlags: 0
@@ -5498,6 +5502,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: dac1a631b172e66469fb09e9987bcf57, type: 3}
   m_PrefabInstance: {fileID: 869333533}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &891075459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 891075462}
+  - component: {fileID: 891075460}
+  m_Layer: 0
+  m_Name: Delay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &891075460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891075459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41b090f161d814e4db9d2129bff4becc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Delay
+--- !u!4 &891075462
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891075459}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 165.46942, y: 465.87735, z: 2385.503}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &891670277
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13974,3 +14022,4 @@ SceneRoots:
   - {fileID: 2068303462}
   - {fileID: 2129869436}
   - {fileID: 1467133149}
+  - {fileID: 891075462}
