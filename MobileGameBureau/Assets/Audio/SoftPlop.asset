@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 784e158de1c9b7046b296e31200b4ddf, type: 3}
-  m_Name: Plop
+  m_Name: SoftPlop
   m_EditorClassIdentifier: Assembly-CSharp::SoundEffect
-  soundName: Plop
-  clip: {fileID: 8300000, guid: 63ad36715477ec346923b108e7ffa33f, type: 3}
+  soundName: SoftPlop
+  clip: {fileID: 8300000, guid: 47446f35dd4e7b548b0c00f66273f056, type: 3}

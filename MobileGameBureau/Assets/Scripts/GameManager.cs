@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
     int lastSecond = -1;
     bool timeUp;
 
+    [SerializeField] private GameObject resultPanel;
+    [SerializeField] private TMP_Text resultText;
+
     public bool IsPlaying => Time.timeScale > 0f;
 
     void Start()
@@ -44,7 +47,15 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        if (timeUp) return;
+        if (timeUp)
+        {
+            Time.timeScale = 0f;
+            resultPanel.SetActive(true);
+            resultText.text = $"Time's up!\n You failed!";
+            return;
+        }
+
+
 
         timeLeft -= Time.deltaTime;
         if (timeLeft <= 0f)
@@ -58,6 +69,13 @@ public class GameManager : MonoBehaviour
 
         int seconds = Mathf.CeilToInt(timeLeft);
         if (seconds != lastSecond) UpdateTimerText(seconds);
+
+        if (orders.Length > 0 && Array.TrueForAll(orders, o => o.remaining <= 0))
+        {
+            Time.timeScale = 0f;
+            resultPanel.SetActive(true);
+            resultText.text = $"All orders completed!\n You win!";
+        }
     }
     void UpdateTimerText(int seconds)
     {
@@ -69,8 +87,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("Time's up!");
     }
 
-    public void OpenPanel(GameObject panel) { panel.SetActive(true); Time.timeScale = 0f; }
-    public void ClosePanel(GameObject panel) { panel.SetActive(false); Time.timeScale = 1f; }
+    public void OpenPanel(GameObject panel) { panel.SetActive(true); Time.timeScale = 0f; AudioManager.Instance.PlaySound("SoftPlop"); }
+    public void ClosePanel(GameObject panel) { panel.SetActive(false); Time.timeScale = 1f; AudioManager.Instance.PlaySound("SoftPlop"); }
 
     void SetupOrder(Order o)
     {
@@ -78,6 +96,7 @@ public class GameManager : MonoBehaviour
         o.remaining = Random.Range(itemCountRange.x, itemCountRange.y);
         o.reserved = 0;
 
+        AudioManager.Instance.PlaySound("SharpPlop");
         o.numberText.text = $"Order: {Random.Range(1000, 10000)}";
         o.itemImage.sprite = itemSprites[Random.Range(0, itemSprites.Length)];
         for (int i = 0; i < o.kgIcons.Length; i++) o.kgIcons[i].SetActive(i < o.weight);
@@ -98,7 +117,6 @@ public class GameManager : MonoBehaviour
         o.reserved += carry;
 
         GameObject v = Instantiate(vehiclePrefab, location, Quaternion.identity);
-        AudioManager.Instance.PlaySound("Plop");
         v.GetComponent<Vehicle>().Init(this, target, carry);
         v.GetComponent<Animator>().SetTrigger(Triggers[target]);
     }
@@ -112,5 +130,4 @@ public class GameManager : MonoBehaviour
 
         if (o.remaining <= 0) o.canvas.SetActive(false);
     }
-
 }
